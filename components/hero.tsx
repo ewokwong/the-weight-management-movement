@@ -35,11 +35,11 @@ export default function Hero({ onCTA }: HeroProps) {
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <h1 className="text-6xl md:text-8xl font-black mb-6 text-balance leading-tight tracking-tight">
-          THE WEIGHT
+          The Weight
           <br />
-          MANAGEMENT
+          Management
           <br />
-          MOVEMENT
+          Movement
         </h1>
 
         <div className="h-1 w-32 bg-secondary mx-auto mb-12"></div>
