@@ -7,24 +7,18 @@ if (!uri) {
   throw new Error("Missing MongoDB connection string. Please set MONGODB_URI in your .env.local file")
 }
 
-// Add database name to connection string if not present
-let connectionUri = uri
-// Check if database name is already in the connection string
-const hasDatabase = /mongodb\+srv:\/\/[^/]+\/([^?]+)/.test(uri)
-if (!hasDatabase) {
-  // Add database name before query parameters
-  if (uri.includes("?")) {
-    connectionUri = uri.replace("?", "/blog_db?")
-  } else {
-    connectionUri = uri + "/blog_db"
-  }
-} else {
-  connectionUri = uri
-}
+// Don't modify the connection string - use it as-is
+// MongoDB Atlas connection strings should be used exactly as provided
+const connectionUri = uri
 
 const options = {
-  serverSelectionTimeoutMS: 10000, // Timeout after 10 seconds
+  serverSelectionTimeoutMS: 30000, // Timeout after 30 seconds
   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+  retryWrites: true,
+  retryReads: true,
+  // Ensure we're using the latest connection options
+  maxPoolSize: 10,
+  minPoolSize: 1,
 }
 
 let client: MongoClient
@@ -59,8 +53,23 @@ const dbName = "blog_db"
 
 // Helper function to get database instance
 export async function getDatabase(): Promise<Db> {
-  const client = await clientPromise
-  return client.db(dbName)
+  try {
+    const client = await clientPromise
+    // Extract database name from connection string if present, otherwise use default
+    const dbNameFromUri = connectionUri.match(/mongodb\+srv:\/\/[^/]+\/([^?]+)/)?.[1]
+    return client.db(dbNameFromUri || dbName)
+  } catch (error: any) {
+    console.error("❌ Failed to get database instance:", error.message || error)
+    // Check for specific SSL errors
+    if (error.message?.includes("SSL") || error.message?.includes("TLS") || error.message?.includes("alert")) {
+      console.error("💡 SSL/TLS Error detected. Common fixes:")
+      console.error("   1. Check MongoDB Atlas IP whitelist - ensure 0.0.0.0/0 is allowed")
+      console.error("   2. Verify your connection string format (should start with mongodb+srv://)")
+      console.error("   3. Check MongoDB Atlas network access settings")
+      console.error("   4. Ensure your MongoDB user has proper permissions")
+    }
+    throw error
+  }
 }
 
 // Collections
@@ -88,14 +97,23 @@ export async function initializeDatabase() {
     console.log("✅ MongoDB indexes created successfully")
     return { success: true }
   } catch (error: any) {
-    console.error("❌ MongoDB initialization error:", error.message || error)
-    if (error.message?.includes("authentication")) {
-      console.error("💡 Check your MongoDB username and password")
+    const errorMessage = error.message || String(error)
+    console.error("❌ MongoDB initialization error:", errorMessage)
+    
+    if (errorMessage.includes("authentication") || errorMessage.includes("auth")) {
+      console.error("💡 Authentication error - Check your MongoDB username and password in the connection string")
+    } else if (errorMessage.includes("timeout") || errorMessage.includes("ENOTFOUND")) {
+      console.error("💡 Network error - Check your MongoDB Atlas IP whitelist")
+      console.error("   Add 0.0.0.0/0 to allow all IPs (or add your specific IP)")
+    } else if (errorMessage.includes("SSL") || errorMessage.includes("TLS") || errorMessage.includes("alert")) {
+      console.error("💡 SSL/TLS Error - Common fixes:")
+      console.error("   1. MongoDB Atlas → Network Access → Add IP Address → 0.0.0.0/0")
+      console.error("   2. Verify connection string format: mongodb+srv://username:password@cluster.mongodb.net/")
+      console.error("   3. Check MongoDB user permissions in Database Access")
+      console.error("   4. Ensure connection string doesn't have conflicting SSL parameters")
     }
-    if (error.message?.includes("timeout") || error.message?.includes("ENOTFOUND")) {
-      console.error("💡 Check your MongoDB Atlas IP whitelist - add 0.0.0.0/0 to allow all IPs for development")
-    }
-    return { success: false, error: error.message || error }
+    
+    return { success: false, error: errorMessage }
   }
 }
 

@@ -92,16 +92,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Add comment to blog's comments array
+    // Use $setOnInsert only for fields that should only exist on new documents
+    // Always update updated_at for existing documents
     await db.collection(collections.blogs).updateOne(
       { slug },
       {
         $push: { comments: commentData },
+        $set: { updated_at: new Date() },
         $setOnInsert: {
           views: 0,
           likes: 0,
           viewed_by: [],
           liked_by: [],
-          updated_at: new Date(),
         },
       },
       { upsert: true }
