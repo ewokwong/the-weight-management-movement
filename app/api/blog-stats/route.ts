@@ -36,19 +36,20 @@ export async function GET(request: NextRequest) {
         liked_by: [],
         updated_at: new Date(),
       })
-      blog = { views: 0, likes: 0, comments: [], viewed_by: [], liked_by: [] }
+      // Fetch the newly created blog
+      blog = await db.collection(collections.blogs).findOne({ slug })
     }
 
     // Check if this visitor has viewed/liked
     const visitorId = getVisitorId(request)
-    const hasViewed = blog.viewed_by?.includes(visitorId) || false
-    const hasLiked = blog.liked_by?.includes(visitorId) || false
+    const hasViewed = blog?.viewed_by?.includes(visitorId) || false
+    const hasLiked = blog?.liked_by?.includes(visitorId) || false
 
     return NextResponse.json({
       stats: {
-        views: blog.views || 0,
-        likes: blog.likes || 0,
-        comments: blog.comments?.length || 0,
+        views: blog?.views || 0,
+        likes: blog?.likes || 0,
+        comments: blog?.comments?.length || 0,
       },
       hasViewed,
       hasLiked,
@@ -125,7 +126,11 @@ export async function POST(request: NextRequest) {
     const blog = await db.collection(collections.blogs).findOne({ slug })
 
     return NextResponse.json({
-      stats: blog || { views: 0, likes: 0, comments: 0 },
+      stats: {
+        views: blog?.views || 0,
+        likes: blog?.likes || 0,
+        comments: blog?.comments?.length || 0,
+      },
     })
   } catch (error) {
     console.error("Error updating stats:", error)
