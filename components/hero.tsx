@@ -34,29 +34,25 @@ export default function Hero({ onCTA }: HeroProps) {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        <h1 className="text-6xl md:text-8xl font-black mb-6 text-balance leading-tight tracking-tight">
-          The Weight
-          <br />
-          Management
-          <br />
-          Movement
+        <h1 className="text-6xl md:text-8xl font-black mb-3 text-balance leading-tight tracking-tight">
+          TWMM
         </h1>
+        <p className="text-2xl md:text-4xl font-normal mb-6 text-primary-foreground/90">
+          The Weight Management Movement.
+        </p>
 
         <div className="h-1 w-32 bg-secondary mx-auto mb-12"></div>
 
-        <p className="text-lg md:text-xl text-primary-foreground/75 mb-12 max-w-2xl mx-auto text-balance font-medium tracking-wide uppercase letter-spacing-wide">
-          Science-Backed Strategies for Sustainable Change
+        <p className="text-lg md:text-xl text-primary-foreground/75 mb-12 max-w-2xl mx-auto text-balance font-normal tracking-wide letter-spacing-wide">
+          Helping you not only lose the weight, but keep it off for life.       
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={onCTA}
-            className="px-8 py-4 bg-secondary text-secondary-foreground rounded-full font-black text-lg hover:bg-secondary/90 transition-all hover:scale-105 active:scale-95 uppercase tracking-wider"
+            className="px-8 py-4 bg-secondary text-secondary-foreground rounded-full font-normal text-lg hover:bg-secondary/90 transition-all hover:scale-105 active:scale-95 tracking-wider"
           >
             Join the Movement
-          </button>
-          <button className="px-8 py-4 border-2 border-primary-foreground text-primary-foreground rounded-full font-black text-lg hover:bg-primary-foreground/10 transition-all uppercase tracking-wider">
-            Read Articles
           </button>
         </div>
       </div>
