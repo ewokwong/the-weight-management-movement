@@ -4,49 +4,7 @@ import { useState } from "react"
 import Hero from "@/components/hero"
 import BlogCard from "@/components/blog-card"
 import EmailModal from "@/components/email-modal"
-
-const mockBlogs = [
-  {
-    id: 1,
-    title: "The Science Behind Sustainable Weight Loss",
-    excerpt: "Discover evidence-based strategies that actually work for long-term weight management.",
-    image: "/healthy-lifestyle-nutrition.jpg",
-    date: "Nov 15, 2025",
-    views: 2843,
-    likes: 456,
-    comments: 89,
-  },
-  {
-    id: 2,
-    title: "Nutrition Myths Debunked",
-    excerpt: "We break down the most common misconceptions about diet and nutrition.",
-    image: "/healthy-food-diet.jpg",
-    date: "Nov 10, 2025",
-    views: 1924,
-    likes: 342,
-    comments: 67,
-  },
-  {
-    id: 3,
-    title: "Building a Sustainable Exercise Routine",
-    excerpt: "Learn how to create a workout plan that fits your lifestyle and goals.",
-    image: "/fitness-exercise-workout.jpg",
-    date: "Nov 5, 2025",
-    views: 3156,
-    likes: 578,
-    comments: 124,
-  },
-  {
-    id: 4,
-    title: "The Role of Sleep in Weight Management",
-    excerpt: "Understand how quality sleep impacts your metabolism and food choices.",
-    image: "/sleep-rest-wellness.jpg",
-    date: "Oct 28, 2025",
-    views: 2341,
-    likes: 421,
-    comments: 93,
-  },
-]
+import { mockBlogs } from "@/lib/blog-data"
 
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false)
