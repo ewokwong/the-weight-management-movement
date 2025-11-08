@@ -23,7 +23,7 @@ if (!hasDatabase) {
 }
 
 const options = {
-  serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
+  serverSelectionTimeoutMS: 10000, // Timeout after 10 seconds
   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 }
 
