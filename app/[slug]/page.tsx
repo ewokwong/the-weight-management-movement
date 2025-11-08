@@ -3,6 +3,8 @@ import { getBlogBySlug, getAllBlogSlugs } from "@/lib/blog-data"
 import { Heart, MessageCircle, Eye, ArrowLeft } from "lucide-react"
 import { notFound } from "next/navigation"
 import type React from "react" // Import React to declare JSX
+import SmoothScrollLink from "@/components/smooth-scroll-link"
+import CommentsSection from "@/components/comments-section"
 
 export async function generateStaticParams() {
   const slugs = getAllBlogSlugs()
@@ -112,16 +114,20 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         </div>
       </article>
 
+      {/* Comments Section */}
+      <CommentsSection blogSlug={slug} />
+
       {/* Related Articles Footer */}
       <div className="border-t border-border py-12 mt-16">
         <div className="max-w-4xl mx-auto px-4 md:px-8 text-center">
           <p className="text-muted-foreground mb-6">Want to explore more articles?</p>
-          <Link
+          <SmoothScrollLink
             href="/"
+            scrollTarget="articles"
             className="inline-block px-6 py-3 bg-foreground text-background font-bold rounded hover:opacity-90 transition-opacity"
           >
             View All Articles
-          </Link>
+          </SmoothScrollLink>
         </div>
       </div>
     </main>
