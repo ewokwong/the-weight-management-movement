@@ -8,7 +8,12 @@ interface HeroProps {
 
 export default function Hero({ onCTA }: HeroProps) {
   const [scrollOpacity, setScrollOpacity] = useState(1)
+  const [typedText, setTypedText] = useState("")
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [wordIndex, setWordIndex] = useState(0)
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  const words = ["think", "define", "connect", "weight."]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +26,42 @@ export default function Hero({ onCTA }: HeroProps) {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  // Typing animation effect
+  useEffect(() => {
+    const currentWord = words[wordIndex]
+    // Longer pause for "re:weight." to emphasize it
+    const pauseTime = currentWord === "weight." ? 5000 : 2000
+    
+    if (!isDeleting && typedText === currentWord) {
+      // Finished typing, pause then start deleting
+      const pauseTimeout = setTimeout(() => {
+        setIsDeleting(true)
+      }, pauseTime)
+      return () => clearTimeout(pauseTimeout)
+    }
+    
+    if (isDeleting && typedText === "") {
+      // Finished deleting, move to next word
+      setIsDeleting(false)
+      setWordIndex((prev) => (prev + 1) % words.length)
+      return
+    }
+
+    const typeSpeed = isDeleting ? 50 : 100
+    
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        // Typing forward
+        setTypedText(currentWord.slice(0, typedText.length + 1))
+      } else {
+        // Deleting backward
+        setTypedText(typedText.slice(0, -1))
+      }
+    }, typeSpeed)
+
+    return () => clearTimeout(timeout)
+  }, [typedText, isDeleting, wordIndex, words])
 
   useEffect(() => {
     const video = videoRef.current
@@ -68,12 +109,26 @@ export default function Hero({ onCTA }: HeroProps) {
       <div className="absolute inset-0 bg-primary/60"></div>
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        <h1 className="text-6xl md:text-8xl font-black mb-6 text-balance leading-tight tracking-tight">
-          TWMM
+        <h1 className="text-6xl md:text-8xl font-black mb-8 text-balance leading-tight tracking-tight">
+          re:{typedText}
+          <span className="animate-pulse">|</span>
         </h1>
-        <p className="text-2xl md:text-4xl font-normal mb-6 text-primary-foreground/90">
-          The Weight Management Movement.
-        </p>
+
+        {/* Banner Visual: re:think, re:define, re:connect, re:weight */}
+        {/* <div className="mb-8 flex flex-wrap justify-center items-center gap-4 md:gap-6">
+          <div className="px-4 py-2 bg-primary-foreground/10 backdrop-blur-sm rounded-full border border-primary-foreground/20">
+            <span className="text-lg md:text-xl font-semibold text-primary-foreground">re:think</span>
+          </div>
+          <div className="px-4 py-2 bg-primary-foreground/10 backdrop-blur-sm rounded-full border border-primary-foreground/20">
+            <span className="text-lg md:text-xl font-semibold text-primary-foreground">re:define</span>
+          </div>
+          <div className="px-4 py-2 bg-primary-foreground/10 backdrop-blur-sm rounded-full border border-primary-foreground/20">
+            <span className="text-lg md:text-xl font-semibold text-primary-foreground">re:connect</span>
+          </div>
+          <div className="px-4 py-2 bg-secondary/20 backdrop-blur-sm rounded-full border border-secondary/40">
+            <span className="text-lg md:text-xl font-semibold text-primary-foreground">re:weight</span>
+          </div>
+        </div> */}
 
         <div className="h-1 w-32 bg-secondary mx-auto mb-6"></div>
 

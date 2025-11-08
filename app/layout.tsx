@@ -11,7 +11,7 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: "The Weight Management Movement",
+  title: "re:weight.",
   description: "Helping you not only lose the weight, but keep it off for life.",
   icons: {
     icon: "/icon.svg",

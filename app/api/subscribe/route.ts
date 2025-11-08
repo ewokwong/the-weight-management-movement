@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       await resend.emails.send({
         from: fromEmail,
         to: emailLower,
-        subject: "Welcome to The Weight Management Movement",
+        subject: "Welcome to re:weight.",
         html: `
           <!DOCTYPE html>
           <html>
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
                       <tr>
                         <td style="padding: 0 0 50px 0;">
                           <h1 style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.5px; color: #000000; text-align: left; line-height: 1.2;">
-                            The Weight Management Movement
+                            re:weight.
                           </h1>
                         </td>
                       </tr>
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
                       <tr>
                         <td style="padding: 0 0 40px 0;">
                           <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.7; color: #000000; font-weight: 400;">
-                            Thank you for joining The Weight Management Movement. We're excited to have you on this journey.
+                            Thank you for joining re:weight. We're excited to have you on this journey.
                           </p>
                           
                           <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.7; color: #000000; font-weight: 400;">
@@ -107,9 +107,9 @@ export async function POST(request: NextRequest) {
           </html>
         `,
         text: `
-The Weight Management Movement
+re:weight.
 
-Thank you for joining The Weight Management Movement. We're excited to have you on this journey.
+Thank you for joining re:weight. We're excited to have you on this journey.
 
 You'll now receive exclusive audio lessons, expert tips, and actionable insights delivered straight to your inbox. Learn on the go - no reading required.
 
