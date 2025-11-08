@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
                           </p>
                           
                           <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.7; color: #000000; font-weight: 400;">
-                            You'll now receive exclusive audio lessons, expert tips, and actionable insights delivered straight to your inbox. Learn on the go—no reading required.
+                            You'll now receive exclusive audio lessons, expert tips, and actionable insights delivered straight to your inbox. Learn on the go - no reading required.
                           </p>
                           
                           <p style="margin: 0; font-size: 16px; line-height: 1.7; color: #000000; font-weight: 400;">
@@ -111,7 +111,7 @@ The Weight Management Movement
 
 Thank you for joining The Weight Management Movement. We're excited to have you on this journey.
 
-You'll now receive exclusive audio lessons, expert tips, and actionable insights delivered straight to your inbox. Learn on the go—no reading required.
+You'll now receive exclusive audio lessons, expert tips, and actionable insights delivered straight to your inbox. Learn on the go - no reading required.
 
 We're here to help you not only lose the weight, but keep it off for life.
 
