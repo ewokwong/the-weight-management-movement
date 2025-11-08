@@ -67,13 +67,6 @@ export default function Hero({ onCTA }: HeroProps) {
       
       <div className="absolute inset-0 bg-primary/60"></div>
 
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-10 text-7xl font-black">↗</div>
-        <div className="absolute bottom-20 right-10 text-7xl font-black">↙</div>
-        <div className="absolute top-1/3 right-20 text-6xl font-black">×</div>
-        <div className="absolute bottom-1/3 left-1/4 text-5xl font-black">•</div>
-      </div>
-
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <h1 className="text-6xl md:text-8xl font-black mb-6 text-balance leading-tight tracking-tight">
           TWMM

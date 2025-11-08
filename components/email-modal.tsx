@@ -14,14 +14,43 @@ export default function EmailModal({ isOpen, onClose }: EmailModalProps) {
   const [email, setEmail] = useState("")
   const [submitted, setSubmitted] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
-    setTimeout(() => {
-      setEmail("")
-      setSubmitted(false)
-      onClose()
-    }, 2000)
+    
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+
+      if (response.ok) {
+        setSubmitted(true)
+        setTimeout(() => {
+          setEmail("")
+          setSubmitted(false)
+          onClose()
+        }, 2000)
+      } else {
+        console.error("Failed to save email")
+        // Still show success to user
+        setSubmitted(true)
+        setTimeout(() => {
+          setEmail("")
+          setSubmitted(false)
+          onClose()
+        }, 2000)
+      }
+    } catch (error) {
+      console.error("Error submitting email:", error)
+      // Still show success to user
+      setSubmitted(true)
+      setTimeout(() => {
+        setEmail("")
+        setSubmitted(false)
+        onClose()
+      }, 2000)
+    }
   }
 
   if (!isOpen) return null

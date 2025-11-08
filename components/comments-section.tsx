@@ -1,72 +1,173 @@
 "use client"
 
-import { useState } from "react"
-import { MessageCircle, Send, User } from "lucide-react"
+import { useState, useEffect } from "react"
+import { MessageCircle, Send, User, Reply } from "lucide-react"
+import { useBlogStats } from "@/lib/use-blog-stats"
 
 interface Comment {
   id: number
   author: string
   content: string
   date: string
-  avatar?: string
+  createdAt?: string
+  parentId?: number | null
+  replies?: Comment[]
 }
 
 interface CommentsSectionProps {
   blogSlug: string
   initialComments?: Comment[]
+  initialCommentsCount?: number
 }
 
-export default function CommentsSection({ blogSlug, initialComments = [] }: CommentsSectionProps) {
+function CommentItem({ 
+  comment, 
+  blogSlug, 
+  onReply 
+}: { 
+  comment: Comment
+  blogSlug: string
+  onReply: (parentId: number) => void
+}) {
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return "Just now"
+    try {
+      return new Date(dateStr).toLocaleDateString()
+    } catch {
+      return "Just now"
+    }
+  }
+
+  return (
+    <div className="pb-6 border-b border-border last:border-0">
+      <div className="flex gap-4">
+        <div className="flex-shrink-0">
+          <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+            <User className="w-5 h-5 text-muted-foreground" />
+          </div>
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="font-semibold">{comment.author}</span>
+            <span className="text-sm text-muted-foreground">
+              {formatDate(comment.createdAt || comment.date)}
+            </span>
+          </div>
+          <p className="text-muted-foreground leading-relaxed mb-3">{comment.content}</p>
+          <button
+            onClick={() => onReply(comment.id)}
+            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Reply className="w-4 h-4" />
+            Reply
+          </button>
+          
+          {/* Render replies */}
+          {comment.replies && comment.replies.length > 0 && (
+            <div className="mt-6 ml-6 pl-6 border-l border-border space-y-6">
+              {comment.replies.map((reply) => (
+                <CommentItem
+                  key={reply.id}
+                  comment={reply}
+                  blogSlug={blogSlug}
+                  onReply={onReply}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function CommentsSection({ 
+  blogSlug, 
+  initialComments = [], 
+  initialCommentsCount = 0 
+}: CommentsSectionProps) {
+  const { updateComments } = useBlogStats(blogSlug, {
+    views: 0,
+    likes: 0,
+    comments: initialCommentsCount,
+  })
+  
   const [comments, setComments] = useState<Comment[]>(initialComments)
   const [newComment, setNewComment] = useState("")
   const [authorName, setAuthorName] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [replyingTo, setReplyingTo] = useState<number | null>(null)
 
-  // Sample comments if none provided
-  const defaultComments: Comment[] = [
-    {
-      id: 1,
-      author: "Alex Johnson",
-      content: "This article really opened my eyes to the importance of sleep in weight management. I've been struggling with late-night cravings, and now I understand why!",
-      date: "2 days ago",
-    },
-    {
-      id: 2,
-      author: "Maria Garcia",
-      content: "Great read! The science-backed approach is exactly what I needed. Looking forward to implementing these strategies.",
-      date: "5 days ago",
-    },
-    {
-      id: 3,
-      author: "David Chen",
-      content: "The section on metabolism was particularly insightful. It's refreshing to see evidence-based content instead of fad diets.",
-      date: "1 week ago",
-    },
-  ]
+  // Load comments from API
+  useEffect(() => {
+    const loadComments = async () => {
+      try {
+        const response = await fetch(`/api/blog-comments?slug=${blogSlug}`)
+        if (response.ok) {
+          const data = await response.json()
+          setComments(data.comments)
+          // Count only top-level comments
+          const topLevelCount = data.comments.length
+          updateComments(topLevelCount)
+        }
+      } catch (error) {
+        console.error("Failed to load comments", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
-  const displayComments = comments.length > 0 ? comments : defaultComments
+    loadComments()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blogSlug]) // updateComments is stable now, but we'll keep it out to be safe
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, parentId?: number | null) => {
     e.preventDefault()
     if (!newComment.trim() || !authorName.trim() || isSubmitting) return
 
     setIsSubmitting(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 500))
+    try {
+      const response = await fetch("/api/blog-comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug: blogSlug,
+          author: authorName,
+          content: newComment,
+          parentId: parentId || null,
+        }),
+      })
 
-    const comment: Comment = {
-      id: Date.now(),
-      author: authorName,
-      content: newComment,
-      date: "Just now",
+      if (response.ok) {
+        // Reload all comments to get the nested structure
+        const reloadResponse = await fetch(`/api/blog-comments?slug=${blogSlug}`)
+        if (reloadResponse.ok) {
+          const reloadData = await reloadResponse.json()
+          setComments(reloadData.comments)
+          const topLevelCount = reloadData.comments.length
+          updateComments(topLevelCount)
+        }
+        
+        setNewComment("")
+        setAuthorName("")
+        setReplyingTo(null)
+      }
+    } catch (error) {
+      console.error("Failed to post comment", error)
+    } finally {
+      setIsSubmitting(false)
     }
-
-    setComments([comment, ...displayComments])
-    setNewComment("")
-    setAuthorName("")
-    setIsSubmitting(false)
   }
+
+  const handleReply = (parentId: number) => {
+    setReplyingTo(parentId)
+  }
+
+  const totalComments = comments.reduce((count, comment) => {
+    return count + 1 + (comment.replies?.length || 0)
+  }, 0)
 
   return (
     <div className="max-w-4xl mx-auto px-4 md:px-8 py-16 border-t border-border">
@@ -75,11 +176,30 @@ export default function CommentsSection({ blogSlug, initialComments = [] }: Comm
           <MessageCircle className="w-6 h-6 text-muted-foreground" />
           <h2 className="text-3xl font-bold">Comments</h2>
         </div>
-        <p className="text-muted-foreground">{displayComments.length} comment{displayComments.length !== 1 ? "s" : ""}</p>
+        <p className="text-muted-foreground">
+          {totalComments} comment{totalComments !== 1 ? "s" : ""}
+        </p>
       </div>
 
       {/* Comment Form */}
-      <form onSubmit={handleSubmit} className="mb-12 p-6 bg-card border border-border rounded-lg">
+      <form 
+        onSubmit={(e) => handleSubmit(e, replyingTo)} 
+        className="mb-12 p-6 bg-card border border-border rounded-lg"
+      >
+        {replyingTo && (
+          <div className="mb-4 p-3 bg-muted rounded-md">
+            <p className="text-sm text-muted-foreground">
+              Replying to comment #{replyingTo}
+            </p>
+            <button
+              type="button"
+              onClick={() => setReplyingTo(null)}
+              className="text-xs text-muted-foreground hover:text-foreground mt-1"
+            >
+              Cancel reply
+            </button>
+          </div>
+        )}
         <div className="mb-4">
           <label htmlFor="author" className="block text-sm font-medium mb-2">
             Name
@@ -96,13 +216,13 @@ export default function CommentsSection({ blogSlug, initialComments = [] }: Comm
         </div>
         <div className="mb-4">
           <label htmlFor="comment" className="block text-sm font-medium mb-2">
-            Comment
+            {replyingTo ? "Reply" : "Comment"}
           </label>
           <textarea
             id="comment"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Share your thoughts..."
+            placeholder={replyingTo ? "Write your reply..." : "Share your thoughts..."}
             rows={4}
             className="w-full px-4 py-2 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
             required
@@ -114,28 +234,26 @@ export default function CommentsSection({ blogSlug, initialComments = [] }: Comm
           className="flex items-center gap-2 px-6 py-2 bg-foreground text-background font-medium rounded-md hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Send className="w-4 h-4" />
-          {isSubmitting ? "Posting..." : "Post Comment"}
+          {isSubmitting ? "Posting..." : replyingTo ? "Post Reply" : "Post Comment"}
         </button>
       </form>
 
       {/* Comments List */}
       <div className="space-y-6">
-        {displayComments.map((comment) => (
-          <div key={comment.id} className="flex gap-4 pb-6 border-b border-border last:border-0">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                <User className="w-5 h-5 text-muted-foreground" />
-              </div>
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="font-semibold">{comment.author}</span>
-                <span className="text-sm text-muted-foreground">{comment.date}</span>
-              </div>
-              <p className="text-muted-foreground leading-relaxed">{comment.content}</p>
-            </div>
-          </div>
-        ))}
+        {isLoading ? (
+          <p className="text-muted-foreground text-center py-8">Loading comments...</p>
+        ) : comments.length === 0 ? (
+          <p className="text-muted-foreground text-center py-8">No comments yet. Be the first to share your thoughts!</p>
+        ) : (
+          comments.map((comment) => (
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              blogSlug={blogSlug}
+              onReply={handleReply}
+            />
+          ))
+        )}
       </div>
     </div>
   )

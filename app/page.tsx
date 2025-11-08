@@ -6,8 +6,53 @@ import BlogCard from "@/components/blog-card"
 import EmailModal from "@/components/email-modal"
 import { mockBlogs } from "@/lib/blog-data"
 
+interface BlogWithStats {
+  id: number
+  title: string
+  excerpt: string
+  image: string
+  date: string
+  views: number
+  likes: number
+  comments: number
+  slug: string
+}
+
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false)
+  const [blogs, setBlogs] = useState<BlogWithStats[]>(mockBlogs)
+
+  // Fetch stats for all blogs
+  useEffect(() => {
+    const fetchBlogStats = async () => {
+      try {
+        const statsPromises = mockBlogs.map(async (blog) => {
+          try {
+            const response = await fetch(`/api/blog-stats?slug=${blog.slug}`)
+            if (response.ok) {
+              const data = await response.json()
+              return {
+                ...blog,
+                views: data.stats.views || 0,
+                likes: data.stats.likes || 0,
+                comments: data.stats.comments || 0,
+              }
+            }
+          } catch (error) {
+            console.error(`Failed to fetch stats for ${blog.slug}:`, error)
+          }
+          return blog
+        })
+
+        const blogsWithStats = await Promise.all(statsPromises)
+        setBlogs(blogsWithStats)
+      } catch (error) {
+        console.error("Failed to fetch blog stats:", error)
+      }
+    }
+
+    fetchBlogStats()
+  }, [])
 
   useEffect(() => {
     // Handle smooth scroll to articles section if hash is present
@@ -32,6 +77,7 @@ export default function Home() {
 
     // Also listen for hash changes
     window.addEventListener("hashchange", handleHashScroll)
+
     return () => window.removeEventListener("hashchange", handleHashScroll)
   }, [])
 
@@ -48,11 +94,26 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {mockBlogs.map((blog) => (
+          <div className="max-w-2xl mx-auto">
+            {blogs.map((blog) => (
               <BlogCard key={blog.id} blog={blog} />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-20 px-4 md:px-8 border-t border-border">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-lg md:text-xl text-muted-foreground mb-6">
+            Got a specific question? Send us an email and we'll either answer you personally or in a post!
+          </p>
+          <a
+            href="mailto:TheWeightManagementMovement@gmail.com"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background rounded-full font-medium text-lg hover:opacity-90 transition-opacity"
+          >
+            Send us an email
+          </a>
         </div>
       </section>
 
