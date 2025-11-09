@@ -2,7 +2,6 @@ export interface Blog {
     id: number
     title: string
     excerpt: string
-    image: string
     date: string
     views: number
     likes: number
@@ -77,10 +76,48 @@ export interface Blog {
   
   export const mockBlogs: Blog[] = [
     {
+      id: 0,
+      title: "What is re:weight?",
+      excerpt: "Who are we and what do we do?",
+      date: "Nov 9, 2025",
+      views: 0,
+      likes: 0,
+      comments: 0,
+      slug: "what-is-reweight",
+      content: `
+
+re:weight is more than just a weight loss program—it's a movement dedicated to helping you transform your relationship with your body and achieve lasting change.
+
+## Our Mission
+
+At re:weight, we believe that sustainable weight management requires more than just dieting. It requires:
+
+- **re:think** - Challenging old beliefs about weight loss and health
+- **re:define** - Creating new definitions of success and wellness
+- **re:connect** - Building deeper connections with your body and yourself
+- **re:weight** - Achieving and maintaining your ideal weight for life
+
+## Why re:weight Works
+
+Unlike traditional diets that focus solely on restriction, re:weight takes a holistic approach:
+
+1. **Evidence-Based Strategies**: We use science-backed methods that actually work long-term
+2. **Audio-First Learning**: Learn on the go—while driving, working, or walking. No reading required.
+3. **Sustainable Practices**: We help you build habits you can maintain for life, not just for a few weeks
+4. **Community Support**: Join a movement of people committed to lasting change
+
+## What Makes Us Different
+
+Most weight loss programs fail because they're too restrictive, too complicated, or too focused on short-term results. re:weight is different:
+
+- **No extreme diets** - We focus on sustainable, moderate approaches
+- **No complicated meal plans** - We teach principles you can apply anywhere
+- **No quick fixes** - We're in this for the long haul, and so are you`,
+    },
+    {
       id: 1,
       title: "The Science Behind Sustainable Weight Loss",
       excerpt: "Discover evidence-based strategies that actually work for long-term weight management.",
-      image: "/healthy-lifestyle-nutrition.jpg",
       date: "Nov 15, 2025",
       views: 0,
       likes: 0,

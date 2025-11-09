@@ -7,12 +7,11 @@ interface Blog {
   id: number
   title: string
   excerpt: string
-  image: string
   date: string
   views: number
   likes: number
   comments: number
-  slug: string // Added slug to Blog interface
+  slug: string
 }
 
 interface BlogCardProps {

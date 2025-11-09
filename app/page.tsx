@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import Hero from "@/components/hero"
 import BlogCard from "@/components/blog-card"
 import EmailModal from "@/components/email-modal"
@@ -10,7 +11,6 @@ interface BlogWithStats {
   id: number
   title: string
   excerpt: string
-  image: string
   date: string
   views: number
   likes: number
@@ -89,16 +89,27 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="mb-12 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">Latest Articles</h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Explore our collection of expert insights and actionable strategies for your weight management journey.
-            </p>
           </div>
 
           <div className="max-w-2xl mx-auto">
-            {blogs.map((blog) => (
-              <BlogCard key={blog.id} blog={blog} />
+            {blogs.slice(0, 5).map((blog, index) => (
+              <div key={blog.id} className={index > 0 ? "mt-8" : ""}>
+                <BlogCard blog={blog} />
+              </div>
             ))}
           </div>
+
+          {/* View All Articles Button */}
+          {blogs.length >= 5 && (
+            <div className="mt-12 text-center">
+              <Link
+                href="/articles"
+                className="inline-block px-8 py-4 bg-foreground text-background rounded-full font-medium text-lg hover:opacity-90 transition-opacity"
+              >
+                View All Articles
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

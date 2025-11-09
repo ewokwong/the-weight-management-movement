@@ -6,6 +6,7 @@ import SmoothScrollLink from "@/components/smooth-scroll-link"
 import CommentsSection from "@/components/comments-section"
 import MarkdownRenderer from "@/components/markdown-renderer"
 import BlogStatsDisplay from "@/components/blog-stats-display"
+import EmailSubscription from "@/components/email-subscription"
 
 export async function generateStaticParams() {
   const slugs = getAllBlogSlugs()
@@ -36,7 +37,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       </div>
 
       {/* Article Content */}
-      <article className="max-w-4xl mx-auto px-4 md:px-8 py-16">
+      <article className="max-w-4xl mx-auto px-4 md:px-8 pt-16 pb-8">
         {/* Header */}
         <header className="mb-12">
           <div className="mb-6">
@@ -54,8 +55,18 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           initialComments={blog.comments}
         />
 
-        {/* Content */}
-        <MarkdownRenderer content={blog.content} />
+        {/* Content and Email Subscription Side by Side */}
+        <div className="flex flex-col lg:flex-row gap-8 mt-8 items-start">
+          {/* Blog Content */}
+          <div className="flex-1 [&>*:last-child]:mb-0">
+            <MarkdownRenderer content={blog.content} />
+          </div>
+          
+          {/* Email Subscription - 50% width, Sticky on larger screens */}
+          <div className="w-full lg:w-[50%] lg:sticky lg:top-8">
+            <EmailSubscription />
+          </div>
+        </div>
       </article>
 
       {/* Comments Section */}

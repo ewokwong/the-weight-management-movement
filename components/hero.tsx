@@ -133,7 +133,7 @@ export default function Hero({ onCTA }: HeroProps) {
         <div className="h-1 w-32 bg-secondary mx-auto mb-6"></div>
 
         <p className="text-lg md:text-xl text-primary-foreground/75 mb-6 max-w-2xl mx-auto text-balance font-normal tracking-wide letter-spacing-wide">
-          Helping you not only lose the weight, but keep it off for life.       
+          For those who want to live - without weight holding them back.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -141,7 +141,7 @@ export default function Hero({ onCTA }: HeroProps) {
             onClick={onCTA}
             className="px-8 py-4 bg-secondary text-secondary-foreground rounded-full font-normal text-lg hover:bg-secondary/90 transition-all hover:scale-105 active:scale-95 tracking-wider"
           >
-            Join the Movement
+            Make a change today
           </button>
         </div>
       </div>
