@@ -55,17 +55,14 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           initialComments={blog.comments}
         />
 
-        {/* Content and Email Subscription Side by Side */}
-        <div className="flex flex-col lg:flex-row gap-8 mt-8 items-start">
-          {/* Blog Content */}
-          <div className="flex-1 [&>*:last-child]:mb-0">
-            <MarkdownRenderer content={blog.content} />
-          </div>
-          
-          {/* Email Subscription - 50% width, Sticky on larger screens */}
-          <div className="w-full lg:w-[50%] lg:sticky lg:top-8">
-            <EmailSubscription />
-          </div>
+        {/* Blog Content */}
+        <div className="mt-8 [&>*:last-child]:mb-0">
+          <MarkdownRenderer content={blog.content} />
+        </div>
+        
+        {/* Email Subscription - At bottom of content */}
+        <div className="mt-12 max-w-2xl mx-auto">
+          <EmailSubscription />
         </div>
       </article>
 

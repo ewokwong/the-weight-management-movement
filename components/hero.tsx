@@ -110,19 +110,19 @@ export default function Hero({ onCTA }: HeroProps) {
       <div className="absolute inset-0 bg-primary/60"></div>
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        <h1 className="text-6xl md:text-8xl font-black mb-8 text-balance leading-tight tracking-tight">
+        <h1 className="text-4xl sm:text-5xl md:text-8xl font-black mb-6 sm:mb-8 text-balance leading-tight tracking-tight">
           re:{typedText}
           <span className="animate-pulse">|</span>
         </h1>
-        <div className="h-1 w-32 bg-secondary mx-auto mb-6"></div>
-        <p className="text-lg md:text-xl text-primary-foreground/75 mb-6 mx-auto whitespace-nowrap font-normal tracking-wide letter-spacing-wide">
+        <div className="h-1 w-24 sm:w-32 bg-secondary mx-auto mb-4 sm:mb-6"></div>
+        <p className="text-sm sm:text-base md:text-xl text-primary-foreground/75 mb-4 sm:mb-6 mx-auto sm:whitespace-nowrap font-normal tracking-wide letter-spacing-wide px-2">
           {SITE_DESCRIPTION}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={onCTA}
-            className="px-8 py-4 bg-secondary text-secondary-foreground rounded-full font-normal text-lg hover:bg-secondary/90 transition-all hover:scale-105 active:scale-95 tracking-wider"
+            className="px-6 sm:px-8 py-3 sm:py-4 bg-secondary text-secondary-foreground rounded-full font-normal text-base sm:text-lg hover:bg-secondary/90 transition-all hover:scale-105 active:scale-95 tracking-wider"
           >
             Make a change today
           </button>
