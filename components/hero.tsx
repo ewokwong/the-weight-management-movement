@@ -133,7 +133,7 @@ export default function Hero({ onCTA }: HeroProps) {
         <div className="h-1 w-32 bg-secondary mx-auto mb-6"></div>
 
         <p className="text-lg md:text-xl text-primary-foreground/75 mb-6 max-w-2xl mx-auto text-balance font-normal tracking-wide letter-spacing-wide">
-          For those who want to live - without weight holding them back.
+          For those who want to live freely - without weight holding them back.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -12,7 +12,7 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: "re:weight.",
-  description: "For those who want to live - without weight holding them back.",
+  description: "For those who want to live freely - without weight holding them back.",
   icons: {
     icon: "/icon.svg",
     shortcut: "/icon.svg",
