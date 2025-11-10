@@ -160,6 +160,66 @@ You may want to get to < 10% body fat, but consider the [effects](https://breakb
 Do you think that is sustainable? Look at some of the top athletes in the world. Instead of celebrating the chiseled body - we should instead be celebrating the functional 15-20% which allows you to enjoy your life and feel strong and confident in yourself.
 `,
     },
+    {
+      id: 2,
+      title: "A beginner's guide to: The gym",
+      excerpt: "",
+      date: "Jan 05, 2025",
+      views: 0,
+      likes: 0,
+      comments: 0,
+      slug: "beginner-gym-workouts",
+      content: `Going to the gym is a form of resistance training. I.e., applying tension to your muscles causes micro-tears in the fibers, helping them grow bigger and stronger - hence the term building muscle!
+
+## What workout should I follow?
+
+The best workout for you will be the one that fits into your schedule. [Studies](https://weightology.net/the-members-area/evidence-based-guides/set-volume-for-muscle-size-the-ultimate-evidence-based-bible/) have shown that the most optimal amount of time is 10-20 sets per muscle group each week. Based off of that, here are some general guidelines to follow based on how often you can go to the gym:
+
+- **1 - 2 days a week:** Full body workouts
+- **3 - 4 days a week:** 2 x Upper / Lower days
+- **4+:** Push Pull Legs, a Bro Split, etc.
+
+In terms of what to do in the workout, there are heaps you can find online (e.g., [here](https://www.hevyapp.com/pplul-split/)). Aim to spend a maximum of 1 hour in the gym. For each exercise, aim for 3-4 sets and 8-12 reps.
+
+## Progressive overload
+
+It's simple - the more stimulus your muscle gets, the more strength required and muscle growth. Total load is calculated by multiplying the weight with the number of sets and reps. Every week, you should be aiming to increase this number!
+
+**Remember:**
+
+<div style="text-align: center; font-size: 1.5rem; font-weight: 600; margin: 1.5rem 0; font-family: monospace;">
+Total Load = Weight lifted × number of sets × number of reps per set
+</div>
+
+Get into the habit early of tracking your workouts - either via apps such as [Strong](https://www.strong.app/), the Notes app on your phone or a physical notebook.
+
+## How many calories does a 1 hour workout burn?
+
+It all depends on the person and intensity of the workout, but as an average rule of thumb an hour workout will be around 200 - 450 calories.
+
+## How long should I rest in between sets?
+
+[Studies](https://pubmed.ncbi.nlm.nih.gov/19691365/) have shown the following:
+
+- **Muscular strength:** 3 - 5 minutes
+- **Muscular hypertrophy (growth):** 30-60 seconds
+- **Muscular endurance:** 20 seconds to 1 minute
+
+Personally, I rest until I feel like I am ready to push the muscle again. I've found that the sweet spot for me to finish my workout within the hour with 3-4 exercises is to rest for 2 minutes in between each set.
+
+## Other helpful tips
+
+**Find a partner who is also looking to start.** Not only can you keep each other accountable and consistent, but you will learn more by working together and sharing what you learn.
+
+**If you are more socially anxious:** 5PM (after work / school) is typically the busiest time. If your gym is 24 hours, you can go towards the end of the day or the middle of the day. Slowly you will realise that everyone's there to work on themselves rather than judge you!
+
+**Pick your outfit / playlist the night before** - remove barriers to not going and just put your kit on and go! Even if you're not feeling like it - the cognitive benefits / consistency goes a long way!
+
+---
+
+Always remember: you can't out train a bad diet - if your goal is weight loss, make sure you are in a caloric deficit that matches your goals.
+`,
+    },
   ]
   
   export function getBlogBySlug(slug: string): Blog | undefined {
