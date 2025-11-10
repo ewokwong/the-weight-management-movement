@@ -93,13 +93,13 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-2 sm:px-0">
-            {blogs.slice(0, 5).map((blog) => (
+            {blogs.slice(0, 6).map((blog) => (
               <BlogCard key={blog.id} blog={blog} />
             ))}
           </div>
 
           {/* View All Articles Button */}
-          {blogs.length >= 5 && (
+          {blogs.length > 6 && (
             <div className="mt-12 text-center">
               <Link
                 href="/articles"
