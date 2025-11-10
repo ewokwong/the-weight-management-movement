@@ -464,7 +464,7 @@ As always, seek a professional for professional advice if you're feeling stuck. 
       id: 5,
       title: "I can't stop thinking about food",
       excerpt: "Constant food thoughts can be exhausting. Learn how to understand what your body is really telling you and shift your relationship with food from restriction to freedom.",
-      date: "Mar 15, 2025",
+      date: "Apr 03, 2025",
       views: 0,
       likes: 0,
       comments: 0,
