@@ -92,11 +92,9 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">Latest Articles</h2>
           </div>
 
-          <div className="max-w-2xl mx-auto px-2 sm:px-0">
-            {blogs.slice(0, 5).map((blog, index) => (
-              <div key={blog.id} className={index > 0 ? "mt-8" : ""}>
-                <BlogCard blog={blog} />
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-2 sm:px-0">
+            {blogs.slice(0, 5).map((blog) => (
+              <BlogCard key={blog.id} blog={blog} />
             ))}
           </div>
 
